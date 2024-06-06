@@ -1,13 +1,15 @@
-import { Chess } from "chess.js"
-import ChessBoardGame from "../components/ChessboardGame"
+'use client '
+import React from "react";
+import ChessBoardGame from "../components/ChessboardGame";
 
-
-function page() {
+function Page() {
   return (
-    <div className="max-h-[50%] max-w-[50%] flex flex-col justify-center items-center">
-      <ChessBoardGame />
+    <div className="w-full h-screen flex flex-row justify-center items-center gap-5 bg-gray-100">
+      <div className="w-3/4 md:w-1/2 lg:w-1/3 xl:w-1/4 bg-white rounded-lg shadow-lg">
+        <ChessBoardGame/>
+      </div>
     </div>
-  )
+  );
 }
 
-export default page
+export default Page;

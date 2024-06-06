@@ -7,11 +7,11 @@ export default function ChessBoardGame() {
   const [game, setGame] = useState(new Chess());
   const [gameHistory, setGameHistory] = useState([]);
 
-  function makeAMove(move: any) {
+  function makeAMove(move) {
     const gameCopy = { ...game };
     const result = gameCopy.move(move);
     setGame(gameCopy);
-    setGameHistory([...gameHistory, move]);
+    setGameHistory([...gameHistory,  { from: result.from, to: result.to, promotion: result.promotion }]);
 
     if (gameCopy.game_over()) {
       if (gameCopy.in_checkmate()) {
@@ -45,7 +45,24 @@ export default function ChessBoardGame() {
     return true;
   }
 
-  console.log("Game History:", gameHistory);
+  return(
+      <div className=" grid grid-flow-col gap-10 w-[150%]">
+        <div>
+          <Chessboard position={game.fen()} onPieceDrop={onDrop}/> 
+        </div>
+        <div>
+          <h2>Moves</h2>
+          <ul>
+            {gameHistory.map((move, index) => (
+                <li key={index}>{`${move.to}`}
+                {move.promotion ? ` (promoted to ${move.promotion})` : ""}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
+  );
 
-  return <Chessboard position={game.fen()} onPieceDrop={onDrop} />;
+  // console.log("Game History:", gameHistory);
+
+  // return <Chessboard position={game.fen()} onPieceDrop={onDrop} />;
 }

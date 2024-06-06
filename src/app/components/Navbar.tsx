@@ -8,10 +8,10 @@ export default function Component() {
         <span className="text-xl font-bold text-white">React Rooks</span>
       </div>
       <div className="flex items-center space-x-8">
-        <button className="text-white">
+        {/* <button className="text-white">
           Play Online
-        </button>
-        <button className="text-white">
+        </button> */}
+        <button className="text-white pr-40">
           Login
         </button>
       </div>
