@@ -1,13 +1,15 @@
+/* eslint-disable */
 "use client";
-import React, { useState, useMemo, useEffect } from 'react';
-import * as ChessLib from 'chess.js';
-import { Chessboard } from 'react-chessboard';
-import Engine from '@/lib/Engine';
-import EvalBar from './EvalBar';
-import { Info } from '@/lib/Info';
-import { Button } from '../ui/button';
+import React, { useState, useMemo, useEffect } from "react";
+import Chess, { ChessInstance, ShortMove } from "chess.js";
+import { Chessboard } from "react-chessboard";
+import Engine from "@/lib/Engine";
+import EvalBar from "./EvalBar";
+import { Info } from "@/lib/Info";
+import { Button } from "../ui/button";
 
-const levels = {
+
+const levels: { [key: string]: number } = {
   "Easy 🤓": 2,
   "Medium 🧐": 8,
   "Hard 😵": 18,
@@ -15,85 +17,92 @@ const levels = {
 
 const ChessGame = ({ gameId }: { gameId: string }) => {
   const engine = useMemo(() => new Engine(), []);
-  const [game, setGame] = useState<ChessLib.ChessInstance>();
-  const [error, setError] = useState<string>();
-  const [gamePosition, setGamePosition] = useState<string>();
+  const [game, setGame] = useState<ChessInstance | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [gamePosition, setGamePosition] = useState<string | null>(null);
   const [stockfishLevel, setStockfishLevel] = useState<number>(2);
-  const [info, setInfo] = useState<Info>();
+  const [info, setInfo] = useState<Info | null>(null);
 
   async function updateGameFen(fen: string) {
-    const url = `/api/chess/updateGame?id=${gameId}`
+    const url = `/api/chess/updateGame?id=${gameId}`;
 
     try {
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ fen: fen }),
-        });
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ fen }),
+      });
 
-        if (!response.ok) {
-            throw new Error('HTTP error ' + response.status);
-        }
+      if (!response.ok) {
+        throw new Error("HTTP error " + response.status);
+      }
 
-        const data = await response.json();
+      const data = await response.json();
 
-        if (data.error) {
-            console.log(data.error);
-        } else {
-            console.log(data.message);
-            return data.game;
-        }
+      if (data.error) {
+        console.log(data.error);
+      } else {
+        console.log(data.message);
+        return data.game;
+      }
     } catch (error) {
-        console.log('Fetch Error: ', error);
+      console.log("Fetch Error: ", error);
     }
-}
+  }
 
   useEffect(() => {
     fetch(`/api/chess?id=${gameId}`)
-      .then(response => response.json())
-      .then(data => {
-        console.log("data : ", data.game)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("data : ", data.game);
         if (data.error) {
           setError(data.error);
         } else {
-          setGame(new ChessLib.Chess(data.game.fen));
+          // @ts-ignore
+          const chess = new Chess(data.game.fen);
+          setGame(chess);
           setGamePosition(data.game.fen);
         }
       })
-      .catch(error => {
+      .catch((error) => {
         console.error(error);
-        setError('An error occurred while fetching the game data.');
+        setError("An error occurred while fetching the game data.");
       });
   }, [gameId]);
 
   function findBestMove() {
-    engine.evaluatePosition((game?.fen()!), stockfishLevel);
+    if (!game) return;
 
-    engine.onMessage(({ bestMove, info }: { bestMove?: string, info?: Info }) => {
-      if (bestMove) {
-        console.log(bestMove);
-        game?.move({
-          from: bestMove.substring(0, 2),
-          to: bestMove.substring(2, 4),
-          promotion: bestMove.substring(4, 5) || 'q', // Default to queen promotion
-        });
+    engine.evaluatePosition(game.fen(), stockfishLevel);
 
-        setGamePosition(game.fen());
+    engine.onMessage(
+      ({ bestMove, info }: { bestMove?: string; info?: Info }) => {
+        if (bestMove) {
+          game.move({
+            from: bestMove.substring(0, 2),
+            to: bestMove.substring(2, 4),
+            promotion: bestMove.substring(4, 5) || "q", // Default to queen promotion
+          } as ShortMove);
+
+          setGamePosition(game.fen());
+        }
+        if (info) {
+          setInfo(info);
+        }
       }
-      if (info) {
-        setInfo(info);
-      }
-    });
+    );
   }
 
   function onDrop(sourceSquare: string, targetSquare: string, piece: string) {
+    if (!game) return false;
+
     const move = game.move({
       from: sourceSquare,
       to: targetSquare,
-      promotion: piece[1]?.toLowerCase() ?? 'q',
-    });
+      promotion: piece[1]?.toLowerCase() ?? "q",
+    } as ShortMove);
 
     // illegal move
     if (move === null) return false;
@@ -122,33 +131,25 @@ const ChessGame = ({ gameId }: { gameId: string }) => {
   }
 
   return (
-    <div className='flex gap-8'>
-
-
-      <div className='flex gap-4 mb-2 flex-col items-center'>
+    <div className="flex gap-8">
+      <div className="flex gap-4 mb-2 flex-col items-center">
         <h1>game : {gameId}</h1>
-        <div
-          className='flex justify-center gap-4 mb-2'
-        >
+        <div className="flex justify-center gap-4 mb-2">
           {Object.entries(levels).map(([level, depth]) => (
-            <Button
-              key={level}
-              onClick={() => setStockfishLevel(depth)}
-            >
+            <Button key={level} onClick={() => setStockfishLevel(depth)}>
               {level}
             </Button>
           ))}
         </div>
 
-
         <Chessboard
           id="PlayVsStockfish"
-          position={gamePosition}
+          position={gamePosition || ""}
           onPieceDrop={onDrop}
         />
 
         <Button
-          className='m-2'
+          className="m-2"
           onClick={() => {
             game.reset();
             setGamePosition(game.fen());
@@ -158,7 +159,7 @@ const ChessGame = ({ gameId }: { gameId: string }) => {
         </Button>
 
         <Button
-          className='m-2'
+          className="m-2"
           onClick={() => {
             game.undo();
             setGamePosition(game.fen());
@@ -172,12 +173,12 @@ const ChessGame = ({ gameId }: { gameId: string }) => {
         <EvalBar score={info?.score ?? 0} />
         <div>
           <pre>
-            {info ? JSON.stringify(info, null, 2) : '🟢stockfish connected'}
+            {info ? JSON.stringify(info, null, 2) : "🟢stockfish connected"}
           </pre>
         </div>
       </div>
     </div>
   );
-}
+};
 
 export default ChessGame;
