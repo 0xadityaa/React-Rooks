@@ -1,7 +1,6 @@
-// public/stockfishWorker.js
-importScripts("stockfish.js");
+importScripts("./Stockfish.js");
 
-const stockfish = new Worker("stockfish.js");
+const stockfish = new Worker("Stockfish.js");
 
 stockfish.onmessage = function (event) {
   postMessage(event.data);
