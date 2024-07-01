@@ -22,7 +22,7 @@ function SignInPage() {
                 </div>
             </form>
 
-            <small>Don't have an account? <a href="/signup">Sign up here</a></small>
+            <small>Don&apos;t have an account? <a href="/signup">Sign up here</a></small>
             
         </div>
   )
