@@ -24,7 +24,7 @@ async function fetchGames() {
 }
 
 function ChessGames() {
-    const [games, setGames] = useState([]);
+    const [games, setGames] = useState<any[]>([]);
 
     useEffect(() => {
         fetchGames().then(fetchedGames => {
