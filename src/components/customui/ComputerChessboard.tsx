@@ -158,18 +158,18 @@ const ChessGame = ({ gameId }: { gameId: string }) => {
   }
 
   const pieces = [
-    "wP",
-    "wN",
-    "wB",
-    "wR",
-    "wQ",
-    "wK",
-    "bP",
-    "bN",
-    "bB",
-    "bR",
-    "bQ",
-    "bK",
+    "WP",
+    "WN",
+    "WB",
+    "WR",
+    "WQ",
+    "WK",
+    "BP",
+    "BN",
+    "BB",
+    "BR",
+    "BQ",
+    "BK",
   ];
 
   const customPieces: {
