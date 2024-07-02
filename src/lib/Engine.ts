@@ -17,6 +17,7 @@ class Engine {
   onMessage(callback: (message: { bestMove?: string, info?: Info }) => void) {
     this.worker.onmessage = (event) => {
       const message = event.data;
+      console.log(message);
       const bestMoveMatch = message.match(/bestmove\s(\w+)/);
       if (bestMoveMatch) {
         callback({ bestMove: bestMoveMatch[1] });

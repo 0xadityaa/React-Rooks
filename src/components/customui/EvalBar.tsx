@@ -1,5 +1,4 @@
 "use client";
-import React from 'react';
 
 const EvalBar = ({ score }: { score: number }) => {
     const maxScore = 1000; // Maximum score in centipawns

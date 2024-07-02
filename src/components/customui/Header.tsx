@@ -20,7 +20,7 @@ export function Header() {
     },
     {
       name: 'Profile',
-      href: '/Profile',
+      href: '/profile',
     }
   ];
 
