@@ -1,36 +1,86 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+<p align="center">
+  <img src="https://github.com/0xadityaa/React-Rooks-UI/assets/62794227/a39ad447-66f6-42f6-8b3a-d93342a20744" alt="Icon" width="50" height="50">
+  <h3 align="center">React Rooks</h3>
+</p>
 
-First, run the development server:
+## About
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+React Rooks is a web-based chess game that allows users to play against an AI (Stockfish). It features game history, on-demand gameplay, real-time game analysis, player statistics, and three difficulty levels. The application includes user authentication for a personalized experience.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Table of Contents
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Contributing](#contributing)
+- [License](#license)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Features
+- **Play Against AI**: Challenge the Stockfish AI at three difficulty levels (easy, medium, hard).
+- **Game History**: View your past games and analyze your moves.
+- **On-Demand Gameplay**: Start a game whenever you want.
+- **Real-Time Game Analysis**: Get insights and analysis during gameplay.
+- **Player Statistics**: Track your performance and statistics.
+- **Authentication**: Secure user authentication for personalized experience.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Tech Stack
+- **Frontend**: React.js, TypeScript, Tailwind CSS
+- **Backend**: Node.js, Next.js, MongoDB, WebSockets
+- **Deployment**: Vercel
+- **AI Integration**: Stockfish WASM (WebAssembly) that runs on client's browser
+- **Authentication**: JWT (JSON Web Tokens)
+- **Packages**: Chess.js, React-Chessboard
 
-## Learn More
+## Installation
+1. Clone the repository:
+    ```bash
+    git clone https://github.com/0xadityaa/React-Rooks-UI.git
+    cd React-Rooks-UI
+    ```
 
-To learn more about Next.js, take a look at the following resources:
+2. Install dependencies:
+    ```bash
+    npm install
+    ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+3. Set up environment variables:
+    Create a `.env.local` file in the root directory and add the following:
+    ```env
+    MONGODB_URL=<your_mongodb_url>
+    JWT_SECRET=<your_jwt_secret>
+    JWT_TOKEN_EXPIRY=6000
+    JWT_REFRESH_TOKEN_EXPIRY=30000
+    EXPIRY_PRESIGNED_URL_USER=120000
+    ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+4. Start the development server:
+    ```bash
+    npm run dev
+    ```
 
-## Deploy on Vercel
+## Usage
+1. **Start a Game**: Log in and select a difficulty level to start a new game against the AI.
+2. **View Game History**: Navigate to your profile to see your past games and their analysis.
+3. **Real-Time Analysis**: During a game, view real-time analysis about your moves.
+4. **Player Statistics**: Check your stats and performance metrics on your profile page.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Contributing
+Contributions are welcome! Please follow these steps to contribute:
+1. Fork the repository.
+2. Create a new branch:
+    ```bash
+    git checkout -b feature/your-feature-name
+    ```
+3. Make your changes and commit them:
+    ```bash
+    git commit -m "Add your commit message"
+    ```
+4. Push to the branch:
+    ```bash
+    git push origin feature/your-feature-name
+    ```
+5. Open a pull request.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## License
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
