@@ -1,31 +1,43 @@
+import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
-import React from 'react'
-
+ 
 function SignInPage() {
   return (
-    <div className="form-wrapper">
-            <h1 className="form-title">Sign in</h1>
-
-            <form action="/api/auth/signin" method="post">
-                <div className="form-group">
-                    <label htmlFor="username">Username</label>
-                    <Input type="text" name="username" id="username" className="w-100" autoFocus placeholder="chino"/>
-                </div>
-
-                <div className="form-group mb-1">
-                    <label htmlFor="password">Password</label>
-                    <Input type="password" name="password" id="password" className="w-100"/>
-                </div>
-
-                <div className="form-group mb-0">
-                    <Input type="submit" value="Login" className="w-100" id="submit"/>
-                </div>
-            </form>
-
-            <small>Don&apos;t have an account? <a href="/signup">Sign up here</a></small>
-            
-        </div>
+    <Card className="relative flex flex-col w-full p-8 sm:max-w-md justify-center gap-2">
+ 
+      <form className="flex-1 flex flex-col w-full justify-center gap-2 text-foreground" action="/api/auth/signin" method="post">
+        <label className="text-md" htmlFor="username">
+          Username
+        </label>
+        <input
+          className="rounded-md px-4 py-2 bg-inherit border mb-6"
+          name="username"
+          placeholder="username"
+          required
+        />
+ 
+        <label className="text-md" htmlFor="password">
+          Password
+        </label>
+        <input
+          className="rounded-md px-4 py-2 bg-inherit border mb-6"
+          type="password"
+          name="password"
+          placeholder="••••••••"
+          required
+        />
+        <Button
+          type='submit'
+          variant={"default"}
+        >
+          Sign In
+        </Button>
+ 
+      </form>
+      <small>Don&apos;t have an account? <a href="/signup" className='underline decoration-blue-500'>Sign up here</a></small>
+    </Card>
   )
 }
-
-export default SignInPage
+ 
+export default SignInPage;

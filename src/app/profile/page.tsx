@@ -1,4 +1,6 @@
 "use client";
+import { PlayerStatsCards } from "@/components/player-stats-cards";
+import { HistoryIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { Chessboard } from "react-chessboard";
@@ -37,19 +39,23 @@ function ChessGames() {
 
   return (
     <div>
-      <h2 className="text-xl font-bold mb-4">
-        Total Games Played: {games.length}
-      </h2>
+      <div>
+        <PlayerStatsCards />
+      </div>
+      <div className="flex flex-row items-center">
+        <HistoryIcon />
+      <h2 className="font-extrabold px-2 py-4 text-3xl">Game History</h2>
+      </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {games.map((game, index) => (
           <div
             key={index}
-            className="bg-background border rounded-lg shadow-md p-4 cursor-pointer hover:bg-primary"
+            className="bg-background border rounded-lg shadow-md p-4 cursor-pointer"
             onClick={() => router.push(`/Ai/${game._id}`)}
           >
             <h3 className="text-lg font-semibold mb-2">Game {index + 1}</h3>
             <p className="text-gray-600">
-              <span className="font-semibold text-white">GameID: </span>
+              <span className="font-semibold">GameID: </span>
               {game._id}
             </p>
             <div className="mt-2 w-full aspect-square">
