@@ -14,7 +14,7 @@ export default function Home() {
       <div className="flex flex-col sm:flex-row justify-center items-center w-full max-w-screen-xl  shadow-lg rounded-lg overflow-hidden transition transform">
         <div className="w-full sm:w-1/2 flex justify-center p-5 lg:p-8">
           <Image
-            src="/chess2.jpg"
+            src="/chessboard.png"
             alt="Chess Game"
             width={500}
             height={500}
