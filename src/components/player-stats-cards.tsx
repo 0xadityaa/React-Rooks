@@ -30,7 +30,7 @@ export function PlayerStatsCards() {
             <GamepadIcon className="h-8 w-8 text-primary" />
             <CardTitle>Total Games</CardTitle>
           </div>
-          <div className="text-4xl font-bold">142</div>
+          <div className="text-4xl font-bold">5</div>
         </CardHeader>
       </Card>
       <Card>
@@ -39,7 +39,7 @@ export function PlayerStatsCards() {
             <TrophyIcon className="h-8 w-8 text-green-500" />
             <CardTitle>Wins</CardTitle>
           </div>
-          <div className="text-4xl font-bold">87</div>
+          <div className="text-4xl font-bold">1</div>
         </CardHeader>
       </Card>
       <Card>
@@ -48,7 +48,7 @@ export function PlayerStatsCards() {
             <FlagIcon className="h-8 w-8 text-red-500" />
             <CardTitle>Losses</CardTitle>
           </div>
-          <div className="text-4xl font-bold">55</div>
+          <div className="text-4xl font-bold">2</div>
         </CardHeader>
       </Card>
       <Card>
@@ -57,7 +57,7 @@ export function PlayerStatsCards() {
             <ClockIcon className="h-8 w-8 text-yellow-500" />
             <CardTitle>Pending Games</CardTitle>
           </div>
-          <div className="text-4xl font-bold">12</div>
+          <div className="text-4xl font-bold">2</div>
         </CardHeader>
       </Card>
     </div>

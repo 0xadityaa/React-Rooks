@@ -13,13 +13,15 @@ export async function POST(req: ExtendedRequest) {
     const gameId = searchParams.get('id')
 
     const data = await req.json();
-    const gameFen  = data['fen']
+    const gameFen  = data['fen'];
+    const status = data['status'];
 
     try {
         const chessGame = await ChessGameModel.findById(gameId).exec()
         if (chessGame) {
             // Update the game's FEN
             chessGame.fen = gameFen
+            chessGame.status = status
             await chessGame.save()
 
             return NextResponse.json({

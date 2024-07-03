@@ -25,7 +25,7 @@ const ChessGame = ({ gameId }: { gameId: string }) => {
   const [gameResult, setGameResult] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  async function updateGameFen(fen: string) {
+  async function updateGameFen(fen: string, status: string) {
     const url = `/api/chess/updateGame?id=${gameId}`;
 
     try {
@@ -34,7 +34,10 @@ const ChessGame = ({ gameId }: { gameId: string }) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ fen }),
+        body: JSON.stringify({
+          fen,
+          status: status ? status : "pending",
+        }),
       });
 
       if (!response.ok) {
@@ -63,9 +66,7 @@ const ChessGame = ({ gameId }: { gameId: string }) => {
           setError(data.error);
         } else {
           // @ts-ignore
-          const chess = new Chess(
-            data.game.fen
-          );
+          const chess = new Chess(data.game.fen);
           setGamePosition(chess.fen());
           setGame(chess);
         }
@@ -130,9 +131,26 @@ const ChessGame = ({ gameId }: { gameId: string }) => {
 
     setGamePosition(game.fen());
 
-    setTimeout(() => {
-      updateGameFen(game.fen());
-    }, 50000);
+    updateGameFen(game.fen(), "pending");
+
+    // Check for game over after AI move
+    if (game.game_over()) {
+      let result = "Game Over. ";
+      if (game.in_checkmate()) {
+        result += "Checkmate! ";
+        result += game.turn() === "w" ? "Black wins." : "White wins.";
+      } else if (game.in_stalemate()) {
+        result += "Stalemate!";
+      } else if (game.in_draw()) {
+        result += "Draw!";
+      } else if (game.in_threefold_repetition()) {
+        result += "Threefold Repetition!";
+      } else if (game.insufficient_material()) {
+        result += "Insufficient Material!";
+      }
+      setGameResult(result);
+      updateGameFen(game.fen(), gameResult!);
+    }
 
     // Find the best move for Stockfish
     setLoading(true);

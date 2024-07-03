@@ -23,6 +23,7 @@ export async function POST(req: ExtendedRequest) {
 
             const newGameInstance = new ChessGameModel({
                 fen: newGameFenString,
+                status: 'pending',
                 user: payload!.sub
             })
 
