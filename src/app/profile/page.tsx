@@ -44,7 +44,7 @@ function ChessGames() {
         {games.map((game, index) => (
           <div
             key={index}
-            className="bg-background border rounded-lg shadow-md p-4 cursor-pointer"
+            className="bg-background border rounded-lg shadow-md p-4 cursor-pointer hover:bg-primary"
             onClick={() => router.push(`/Ai/${game._id}`)}
           >
             <h3 className="text-lg font-semibold mb-2">Game {index + 1}</h3>
