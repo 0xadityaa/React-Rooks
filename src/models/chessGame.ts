@@ -16,6 +16,14 @@ const chessGameSchema = new Schema({
     status: {
       type: String,
       required: true
+    },
+    winner: {
+      type: String,
+      required: false
+    },
+    result_type: {
+      type: String,
+      required: false
     }
   }
 );

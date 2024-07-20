@@ -17,12 +17,12 @@ export function Header() {
       ),
     },
     {
-      name: "Game",
-      href: "/Ai",
-    },
-    {
       name: "Profile",
       href: "/profile",
+    },
+    {
+      name: "Leaderboard",
+      href: "/top-players",
     },
   ];
 

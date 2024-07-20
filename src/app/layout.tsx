@@ -1,9 +1,9 @@
-
 import { Header } from "@/components/customui/Header";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Footer } from "@/components/customui/Footer";
 import { Analytics } from "@vercel/analytics/react"
+import { Montserrat } from "next/font/google";
 
 
 export const metadata = {

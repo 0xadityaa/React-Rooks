@@ -24,8 +24,16 @@ const ChessGame = ({ gameId }: { gameId: string }) => {
   const [info, setInfo] = useState<Info | null>(null);
   const [gameResult, setGameResult] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [selectedDifficulty, setSelectedDifficulty] =
+    useState<string>("Easy 🤓");
+  const [isThinking, setIsThinking] = useState(false);
 
-  async function updateGameFen(fen: string, status: string) {
+  async function updateGameFen(
+    fen: string,
+    status: string,
+    winner?: string,
+    result_type?: string
+  ) {
     const url = `/api/chess/updateGame?id=${gameId}`;
 
     try {
@@ -37,6 +45,8 @@ const ChessGame = ({ gameId }: { gameId: string }) => {
         body: JSON.stringify({
           fen,
           status: status ? status : "pending",
+          winner,
+          result_type
         }),
       });
 
@@ -80,6 +90,7 @@ const ChessGame = ({ gameId }: { gameId: string }) => {
   function findBestMove() {
     if (!game) return;
 
+    setIsThinking(true);
     engine.evaluatePosition(game.fen(), stockfishLevel);
 
     engine.onMessage(
@@ -96,15 +107,25 @@ const ChessGame = ({ gameId }: { gameId: string }) => {
             let result = "Game Over. ";
             if (game.in_checkmate()) {
               result += "Checkmate! ";
+              updateGameFen(game.fen(), "Completed", game.turn() === "w" ? "b" : "w", result);
+              console.log(game.fen(), "Completed", game.turn() === "w" ? "b." : "w.", result);
               result += game.turn() === "w" ? "Black wins." : "White wins.";
             } else if (game.in_stalemate()) {
               result += "Stalemate!";
+              updateGameFen(game.fen(), "Completed", game.turn(), result);
+              result += game.turn() === "w" ? "Black wins." : "White wins.";
             } else if (game.in_draw()) {
               result += "Draw!";
+              updateGameFen(game.fen(), "Completed", game.turn(), result);
+              result += game.turn() === "w" ? "Black wins." : "White wins.";
             } else if (game.in_threefold_repetition()) {
               result += "Threefold Repetition!";
+              updateGameFen(game.fen(), "Completed", game.turn(), result);
+              result += game.turn() === "w" ? "Black wins." : "White wins.";
             } else if (game.insufficient_material()) {
               result += "Insufficient Material!";
+              updateGameFen(game.fen(), "Completed", game.turn(), result);
+              result += game.turn() === "w" ? "Black wins." : "White wins.";
             }
             setGameResult(result);
           }
@@ -113,6 +134,7 @@ const ChessGame = ({ gameId }: { gameId: string }) => {
           setInfo(info);
         }
         setLoading(false);
+        setIsThinking(false);
       }
     );
   }
@@ -138,18 +160,26 @@ const ChessGame = ({ gameId }: { gameId: string }) => {
       let result = "Game Over. ";
       if (game.in_checkmate()) {
         result += "Checkmate! ";
+        updateGameFen(game.fen(), "Completed", game.turn(), result);
         result += game.turn() === "w" ? "Black wins." : "White wins.";
       } else if (game.in_stalemate()) {
         result += "Stalemate!";
+        updateGameFen(game.fen(), "Completed", game.turn(), result);
+        result += game.turn() === "w" ? "Black wins." : "White wins.";
       } else if (game.in_draw()) {
         result += "Draw!";
+        updateGameFen(game.fen(), "Completed", game.turn(), result);
+        result += game.turn() === "w" ? "Black wins." : "White wins.";
       } else if (game.in_threefold_repetition()) {
         result += "Threefold Repetition!";
+        updateGameFen(game.fen(), "Completed", game.turn(), result);
+        result += game.turn() === "w" ? "Black wins." : "White wins.";
       } else if (game.insufficient_material()) {
         result += "Insufficient Material!";
+        updateGameFen(game.fen(), "Completed", game.turn(), result);
+        result += game.turn() === "w" ? "Black wins." : "White wins.";
       }
       setGameResult(result);
-      updateGameFen(game.fen(), gameResult!);
     }
 
     // Find the best move for Stockfish
@@ -208,15 +238,8 @@ const ChessGame = ({ gameId }: { gameId: string }) => {
 
   return (
     <div className="flex flex-col md:flex-row gap-8">
+      <EvalBar score={info?.score ?? 0} />
       <div className="flex flex-col gap-4 mb-2 items-center md:w-3/5">
-        <div className="flex justify-center gap-4 mb-2">
-          {Object.entries(levels).map(([level, depth]) => (
-            <Button key={level} onClick={() => setStockfishLevel(depth)}>
-              {level}
-            </Button>
-          ))}
-        </div>
-
         <div className="w-[500px]">
           <Chessboard
             id="StyledBoard"
@@ -232,7 +255,43 @@ const ChessGame = ({ gameId }: { gameId: string }) => {
             customPieces={customPieces}
           />
         </div>
-        <div className="flex flex-row">
+      </div>
+      <div className="md:w-2/5 flex flex-col">
+        <div className="overflow-hidden h-[500px] border-dashed border-2 border-gray-200 p-4 rounded-md">
+          <h2 className="mb-2">Game Evaluation</h2>
+          {!info && !isThinking && (
+            <div className="bg-background border text-white p-2 mt-5 rounded-md h-[420px]">
+              🟢 Stockfish ready
+            </div>
+          )}
+          {isThinking && (
+            <div className="animate-pulse bg-yellow-100 text-yellow-800 p-2 mt-5 rounded-md">
+              🤔 Stockfish is thinking...
+            </div>
+          )}
+          {!isThinking && info && <ChessDataComponent data={info} />}
+        </div>
+
+        <div className="flex flex-wrap justify-center gap-2 mt-4">
+          {Object.entries(levels).map(([level, depth]) => (
+            <Button
+              key={level}
+              onClick={() => {
+                setStockfishLevel(depth);
+                setSelectedDifficulty(level);
+              }}
+              className={`${
+                selectedDifficulty === level
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-200 text-gray-800"
+              } hover:bg-blue-600 hover:text-white transition-colors`}
+            >
+              {level}
+            </Button>
+          ))}
+        </div>
+
+        <div className="flex justify-center mt-4">
           <Button
             className="m-2"
             onClick={() => {
@@ -252,19 +311,6 @@ const ChessGame = ({ gameId }: { gameId: string }) => {
           >
             Undo
           </Button>
-        </div>
-      </div>
-      <div className="md:w-2/5">
-        <h2>Game Evaluation</h2>
-        <EvalBar score={info?.score ?? 0} />
-        <div className="overflow-auto">
-          {!info && (
-            <div className="bg-background border text-white p-2 mt-5 rounded-md">
-              🟢 Stockfish ready
-            </div>
-          )}
-          {loading && <div>Loading...</div>}
-          {info && <ChessDataComponent data={info} />}
         </div>
       </div>
     </div>

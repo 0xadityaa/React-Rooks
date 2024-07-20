@@ -1,14 +1,15 @@
 "use client";
+
 type ChessData = {
-  depth: string,
-  seldepth: string,
-  multipv: string,
-  score: number,
-  nodes: string,
-  nps: string,
-  tbhits: string,
-  time: string,
-  pv: string,
+  depth: string;
+  seldepth: string;
+  multipv: string;
+  score: number;
+  nodes: string;
+  nps: string;
+  tbhits: string;
+  time: string;
+  pv: string;
 };
 
 const ChessDataComponent: React.FC<{ data: ChessData }> = ({ data }) => {
@@ -43,8 +44,8 @@ const ChessDataComponent: React.FC<{ data: ChessData }> = ({ data }) => {
       </div>
       <div className="mt-4">
         <strong>PV:</strong>
-        <div className="mt-2 p-2 border rounded bg-card overflow-x-auto">
-          <pre className="whitespace-pre-wrap">{data.pv}</pre>
+        <div className="mt-2 p-2 border rounded bg-card overflow-auto overflow-y-auto">
+          <pre className="whitespace-pre-wrap max-w-xs">{data.pv}</pre>
         </div>
       </div>
     </div>
