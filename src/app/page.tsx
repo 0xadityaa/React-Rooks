@@ -1,15 +1,35 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { BorderBeam } from "@/components/magicui/border-beam";
 import ShineBorder from "@/components/magicui/shine-border";
+import FlipText from "@/components/magicui/flip-text";
+
+interface Stats {
+  usersCount: number;
+  gamesCount: number;
+}
 
 export default function Home() {
-  const router = useRouter(); // Use useRouter hook to get the router object
+  const [stats, setStats] = useState<Stats | null>(null);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const response = await fetch("/api/");
+        if (!response.ok) {
+          throw new Error("Failed to fetch stats");
+        }
+        const data: Stats = await response.json();
+        setStats(data);
+      } catch (error) {
+        console.error("Error fetching stats:", error);
+      }
+    };
+
+    fetchStats();
+  }, []);
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center sm:p-12 ">
@@ -17,37 +37,65 @@ export default function Home() {
         className="flex flex-col border sm:flex-row justify-center items-center w-full max-w-screen-xl  shadow-lg rounded-lg overflow-hidden transition transform"
         color={["#A07CFE", "#FE8FB5", "#FFBE7B"]}
       >
-        <div className="w-full sm:w-1/2 flex justify-center p-5 lg:p-8">
-          <Image
-            src="/chessboard.png"
-            alt="Chess Game"
-            width={500}
-            height={500}
-            className="rounded-lg shadow-md"
-          />
-        </div>
-        <div className="w-full sm:w-1/2 flex flex-col justify-center p-4 sm:p-6 lg:p-8">
-          <h1 className="text-3xl sm:text-4xl font-bold font-mono  mb-4">
-            Play Chess Against Stockfish Anytime
-          </h1>
-          <p className="text-gray-600 mb-8 font-mono dark:text-gray-400">
-            Join our chess platform and improve your gameplay.
-          </p>
-          <form action={"/api/chess"} method="POST">
-            <Button
-              type="submit"
-              className="p-5 text-3xl font-bold text-background bg-[#779952] hover:bg-slate-500"
-            >
-              <Image
-                src="/btn-icon.svg"
-                className="mr-3"
-                width={30}
-                height={30}
-                alt="React Rooks Logo"
-              />
-              Start Game
-            </Button>
-          </form>
+        <div className="flex flex-col sm:flex-row justify-center items-center w-full max-w-screen-xl  shadow-lg rounded-lg overflow-hidden transition transform">
+          <div className="w-full sm:w-1/2 flex justify-center p-5 lg:p-8">
+            <Image
+              src="/chessboard.png"
+              alt="Chess Game"
+              width={500}
+              height={500}
+              className="rounded-lg shadow-md"
+            />
+          </div>
+          <div className="w-full sm:w-1/2 flex flex-col justify-start p-4 sm:p-6 lg:p-8">
+            <h1 className="text-3xl sm:text-4xl font-bold font-mono mb-4 text-left">
+              Play Chess Against Stockfish Anytime
+              {/* <FlipText
+                className="text-3xl sm:text-4xl font-bold font-mono mb-4 text-left w-full tracking-tighter"
+                word="Stockfish"
+              />{" "} */}
+            </h1>
+            <p className="text-gray-600 mb-8 font-mono dark:text-gray-400">
+              Join our chess platform and improve your gameplay.
+            </p>
+            <div className="flex flex-row justify-start space-x-4 mb-8">
+              {stats && (
+                <>
+                  <div className="text-center">
+                    <p className="text-xl font-bold font-mono">
+                      {stats.usersCount}{" "}
+                      <span className="font-thin text-xl font-mono text-gray-400">
+                        Players Registered
+                      </span>
+                    </p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-xl font-bold font-mono">
+                      {stats.gamesCount}{" "}
+                      <span className="font-thin text-xl font-mono text-gray-400">
+                        Games Played
+                      </span>
+                    </p>
+                  </div>
+                </>
+              )}
+            </div>
+            <form action={"/api/chess"} method="POST">
+              <Button
+                type="submit"
+                className="p-5 text-3xl font-bold text-background bg-[#779952] hover:bg-slate-500"
+              >
+                <Image
+                  src="/btn-icon.svg"
+                  className="mr-3"
+                  width={30}
+                  height={30}
+                  alt="React Rooks Logo"
+                />
+                Start Game
+              </Button>
+            </form>
+          </div>
         </div>
       </ShineBorder>
     </main>

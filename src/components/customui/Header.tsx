@@ -13,7 +13,7 @@ export function Header() {
       name: "React Rooks",
       href: "/",
       icon: () => (
-        <Image src="/Icon.svg" width={50} height={50} alt="React Rooks Logo" />
+        <Image src="/Icon.svg" width={30} height={30} alt="React Rooks Logo" />
       ),
     },
     {

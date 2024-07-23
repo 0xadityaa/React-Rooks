@@ -3,12 +3,18 @@ import Image from "next/image"
 import Link from "next/link"
 
 export const Footer = () => {
+const avatarUrls = [
+  "https://www.svgrepo.com/show/354113/nextjs-icon.svg",
+  "https://www.svgrepo.com/show/374146/typescript-official.svg",
+  "https://www.svgrepo.com/show/374180/wasm.svg",
+  "https://www.svgrepo.com/show/331488/mongodb.svg",
+];
     return (
         <div>
             <footer className="p-4 bg-background rounded-lg shadow md:px-6 md:py-8 w-full">
                 <div className="sm:flex sm:items-center sm:justify-between">
                     <a href="#" target="_blank" className="flex items-center mb-4 sm:mb-0">
-                        <Image src="/Icon.svg" width={50} height={50} alt="React Rooks Logo" />
+                        <Image src="/Icon.svg" width={30} height={30} alt="React Rooks Logo" />
                         <span className="self-center text-xl font-semibold font-mono whitespace-nowrap">React Rooks</span>
                     </a>
                     <ul className="flex flex-wrap items-center mb-6 sm:mb-0 gap-2">
