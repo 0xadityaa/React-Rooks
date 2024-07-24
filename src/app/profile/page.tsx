@@ -55,8 +55,8 @@ function ChessGames() {
           >
             <h3 className="text-lg font-semibold mb-2">Game {index + 1}</h3>
             <p className="text-gray-600">
-              <span className="font-semibold">GameID: </span>
-              {game._id}
+              <span className="font-semibold">Status: </span>
+              {game.status}
             </p>
             <div className="mt-2 w-full aspect-square">
               <Chessboard

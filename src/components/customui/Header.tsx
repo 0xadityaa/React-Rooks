@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { CpuIcon, LogInIcon, LogOutIcon, MenuIcon } from "lucide-react";
+import { LogInIcon, LogOutIcon, MenuIcon } from "lucide-react";
 import ThemeChangeToggle from "../ThemeChangeToggle";
 import { cookies } from "next/headers";
 import Image from "next/image";
@@ -13,7 +13,7 @@ export function Header() {
       name: "React Rooks",
       href: "/",
       icon: () => (
-        <Image src="/Icon.svg" width={50} height={50} alt="React Rooks Logo" />
+        <Image src="/Icon.svg" width={30} height={30} alt="React Rooks Logo" />
       ),
     },
     {
@@ -86,11 +86,13 @@ export function Header() {
 
           {/* implement auth button functionality here */}
           {token ? (
-            <Link href={"/api/auth/signout"}>
+            <Link href={"/api/auth/signout"} className="flex items-center gap-2">
+              <p>Sign Out</p>
               <LogOutIcon className="h-6 w-6" />
             </Link>
           ) : (
-            <Link href={"/signin"}>
+            <Link href={"/signin"} className="flex items-center gap-2">
+              <p>Sign In</p>
               <LogInIcon className="h-6 w-6" />
             </Link>
           )}

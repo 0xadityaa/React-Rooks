@@ -47,27 +47,27 @@ export default function Home() {
             />
           </div>
           <div className="w-full sm:w-1/2 flex flex-col justify-start p-4 sm:p-6 lg:p-8">
-            <h1 className="text-3xl sm:text-4xl font-bold font-mono mb-4 text-left">
-              Play Chess Against Stockfish Anytime
+            <h1 className="text-3xl sm:text-4xl font-bold mb-4 text-left">
+              Join our chess platform and improve your chess.
             </h1>
-            <p className="text-gray-600 mb-8 font-mono dark:text-gray-400">
-              Join our chess platform and improve your gameplay.
+            <p className="text-gray-600 mb-8   dark:text-gray-400">
+              Play against <span className="font-bold">strongest</span> chess AI and get detailed analysis of your games
             </p>
             <div className="flex flex-row justify-start space-x-4 mb-8">
               {stats && (
                 <>
                   <div className="text-center">
-                    <p className="text-xl font-bold font-mono">
+                    <p className="text-xl font-bold  ">
                       {stats.usersCount}{" "}
-                      <span className="font-thin text-xl font-mono text-gray-400">
+                      <span className="font-thin text-xl   text-gray-400">
                         Players Registered
                       </span>
                     </p>
                   </div>
                   <div className="text-center">
-                    <p className="text-xl font-bold font-mono">
+                    <p className="text-xl font-bold  ">
                       {stats.gamesCount}{" "}
-                      <span className="font-thin text-xl font-mono text-gray-400">
+                      <span className="font-thin text-xl   text-gray-400">
                         Games Played
                       </span>
                     </p>
@@ -78,7 +78,7 @@ export default function Home() {
             <form action={"/api/chess"} method="POST">
               <Button
                 type="submit"
-                className="p-5 text-3xl font-bold text-background bg-[#779952] hover:bg-slate-500"
+                className="p-5 text-2xl font-mono font-bold text-background bg-[#779952] hover:bg-slate-500"
               >
                 <Image
                   src="/btn-icon.svg"
@@ -87,7 +87,7 @@ export default function Home() {
                   height={30}
                   alt="React Rooks Logo"
                 />
-                Start Game
+                Play now
               </Button>
             </form>
           </div>
