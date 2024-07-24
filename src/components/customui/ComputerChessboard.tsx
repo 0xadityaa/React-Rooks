@@ -8,6 +8,13 @@ import EvalBar from "./EvalBar";
 import { Info } from "@/lib/Info";
 import { Button } from "../ui/button";
 import ChessDataComponent from "./ChessDataCard";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "../ui/card";
 
 const levels: { [key: string]: number } = {
   "Easy 🤓": 2,
@@ -46,7 +53,7 @@ const ChessGame = ({ gameId }: { gameId: string }) => {
           fen,
           status: status ? status : "pending",
           winner,
-          result_type
+          result_type,
         }),
       });
 
@@ -107,8 +114,18 @@ const ChessGame = ({ gameId }: { gameId: string }) => {
             let result = "Game Over. ";
             if (game.in_checkmate()) {
               result += "Checkmate! ";
-              updateGameFen(game.fen(), "Completed", game.turn() === "w" ? "b" : "w", result);
-              console.log(game.fen(), "Completed", game.turn() === "w" ? "b." : "w.", result);
+              updateGameFen(
+                game.fen(),
+                "Completed",
+                game.turn() === "w" ? "b" : "w",
+                result
+              );
+              console.log(
+                game.fen(),
+                "Completed",
+                game.turn() === "w" ? "b." : "w.",
+                result
+              );
               result += game.turn() === "w" ? "Black wins." : "White wins.";
             } else if (game.in_stalemate()) {
               result += "Stalemate!";
@@ -256,63 +273,64 @@ const ChessGame = ({ gameId }: { gameId: string }) => {
           />
         </div>
       </div>
-      <div className="md:w-2/5 flex flex-col">
-        <div className="overflow-hidden h-[500px] border-dashed border-2 border-gray-200 p-4 rounded-md">
-          <h2 className="mb-2">Game Evaluation</h2>
+      <Card className="md:w-2/5 flex flex-col">
+        <CardContent className="overflow-hidden h-[500px] p-4 rounded-md">
+          <CardTitle className="mb-2">Game Analysis</CardTitle>
           {!info && !isThinking && (
-            <div className="bg-background border text-white p-2 mt-5 rounded-md h-[420px]">
+            <CardContent className="bg-background text-white p-2 mt-5 rounded-md h-[420px]">
               🟢 Stockfish ready
-            </div>
+            </CardContent>
           )}
           {isThinking && (
-            <div className="animate-pulse bg-yellow-100 text-yellow-800 p-2 mt-5 rounded-md">
+            <CardContent className="animate-pulse bg-yellow-100 text-yellow-800 p-2 mt-5 rounded-md">
               🤔 Stockfish is thinking...
-            </div>
+            </CardContent>
           )}
           {!isThinking && info && <ChessDataComponent data={info} />}
-        </div>
-
-        <div className="flex flex-wrap justify-center gap-2 mt-4">
-          {Object.entries(levels).map(([level, depth]) => (
+        </CardContent>
+        <div>
+          <CardContent className="flex justify-center gap-2 mt-4">
+            {Object.entries(levels).map(([level, depth]) => (
+              <Button
+                key={level}
+                onClick={() => {
+                  setStockfishLevel(depth);
+                  setSelectedDifficulty(level);
+                }}
+                className={`${
+                  selectedDifficulty === level
+                    ? "bg-blue-500 text-white"
+                    : "bg-gray-200 text-gray-800"
+                } hover:bg-blue-600 hover:text-white transition-colors`}
+              >
+                {level}
+              </Button>
+            ))}
+          </CardContent>
+          <CardContent className="flex justify-center mt-4">
+            {" "}
+            {/* Updated line */}
             <Button
-              key={level}
+              className="m-2"
               onClick={() => {
-                setStockfishLevel(depth);
-                setSelectedDifficulty(level);
+                game.reset();
+                setGamePosition(game.fen());
               }}
-              className={`${
-                selectedDifficulty === level
-                  ? "bg-blue-500 text-white"
-                  : "bg-gray-200 text-gray-800"
-              } hover:bg-blue-600 hover:text-white transition-colors`}
             >
-              {level}
+              Reset
             </Button>
-          ))}
+            <Button
+              className="m-2"
+              onClick={() => {
+                game.undo();
+                setGamePosition(game.fen());
+              }}
+            >
+              Undo
+            </Button>
+          </CardContent>
         </div>
-
-        <div className="flex justify-center mt-4">
-          <Button
-            className="m-2"
-            onClick={() => {
-              game.reset();
-              setGamePosition(game.fen());
-            }}
-          >
-            Reset
-          </Button>
-
-          <Button
-            className="m-2"
-            onClick={() => {
-              game.undo();
-              setGamePosition(game.fen());
-            }}
-          >
-            Undo
-          </Button>
-        </div>
-      </div>
+      </Card>
     </div>
   );
 };
