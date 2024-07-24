@@ -113,10 +113,10 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center sm:p-12 ">
       <ShineBorder
-        className="flex flex-col border sm:flex-row justify-center items-center w-full max-w-screen-xl  shadow-lg rounded-lg overflow-hidden transition transform"
+        className="flex flex-col border sm:flex-row justify-center items-center w-full max-w-screen-xl rounded-lg overflow-hidden transition transform"
         color={["#A07CFE", "#FE8FB5", "#FFBE7B"]}
       >
-        <div className="flex flex-col sm:flex-row justify-center items-center w-full max-w-screen-xl  shadow-lg rounded-lg overflow-hidden transition transform">
+        <div className="flex flex-col sm:flex-row justify-center items-center w-full max-w-screen-xl rounded-lg overflow-hidden transition transform m-2">
           <div className="w-full sm:w-1/2 flex justify-center p-5 lg:p-8">
             <Image
               src="/chessboard.png"

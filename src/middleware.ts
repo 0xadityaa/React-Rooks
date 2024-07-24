@@ -67,6 +67,7 @@ export async function middleware(request: ExtendedRequest) {
 export const config = {
   matcher: [
     "/",
+    "/api",
     "/api/auth/:path",
     "/api/chess",
     "/signin",

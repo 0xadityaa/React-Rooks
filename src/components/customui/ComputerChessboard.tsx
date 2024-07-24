@@ -17,9 +17,9 @@ import {
 } from "../ui/card";
 
 const levels: { [key: string]: number } = {
-  "Easy 🤓": 2,
-  "Medium 🧐": 8,
-  "Hard 😵": 18,
+  "Easy": 2,
+  "Medium": 8,
+  "Hard": 18,
 };
 
 const ChessGame = ({ gameId }: { gameId: string }) => {
@@ -32,7 +32,7 @@ const ChessGame = ({ gameId }: { gameId: string }) => {
   const [gameResult, setGameResult] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [selectedDifficulty, setSelectedDifficulty] =
-    useState<string>("Easy 🤓");
+    useState<string>("Easy");
   const [isThinking, setIsThinking] = useState(false);
 
   async function updateGameFen(
@@ -86,6 +86,9 @@ const ChessGame = ({ gameId }: { gameId: string }) => {
           const chess = new Chess(data.game.fen);
           setGamePosition(chess.fen());
           setGame(chess);
+          if(chess.turn() == "b"){
+              findBestMove(chess);
+          }
         }
       })
       .catch((error) => {
@@ -94,55 +97,59 @@ const ChessGame = ({ gameId }: { gameId: string }) => {
       });
   }, [gameId]);
 
-  function findBestMove() {
-    if (!game) return;
+  function findBestMove(chessGameInstance?: ChessInstance) {
+    let gameTemp = chessGameInstance ?? game;
+    console.log(gameTemp)
+
+    if (!gameTemp) return;
+    console.log("findBestMove");
 
     setIsThinking(true);
-    engine.evaluatePosition(game.fen(), stockfishLevel);
+    engine.evaluatePosition(gameTemp.fen(), stockfishLevel);
 
     engine.onMessage(
       ({ bestMove, info }: { bestMove?: string; info?: Info }) => {
         if (bestMove) {
-          game.move({
+          gameTemp.move({
             from: bestMove.substring(0, 2),
             to: bestMove.substring(2, 4),
             promotion: bestMove.substring(4, 5) || "q",
           } as ShortMove);
-          setGamePosition(game.fen());
+          setGamePosition(gameTemp.fen());
           // Check for game over after AI move
-          if (game.game_over()) {
+          if (gameTemp.game_over()) {
             let result = "Game Over. ";
-            if (game.in_checkmate()) {
+            if (gameTemp.in_checkmate()) {
               result += "Checkmate! ";
               updateGameFen(
-                game.fen(),
+                gameTemp.fen(),
                 "Completed",
-                game.turn() === "w" ? "b" : "w",
+                gameTemp.turn() === "w" ? "b" : "w",
                 result
               );
               console.log(
-                game.fen(),
+                gameTemp.fen(),
                 "Completed",
-                game.turn() === "w" ? "b." : "w.",
+                gameTemp.turn() === "w" ? "b." : "w.",
                 result
               );
-              result += game.turn() === "w" ? "Black wins." : "White wins.";
-            } else if (game.in_stalemate()) {
+              result += gameTemp.turn() === "w" ? "Black wins." : "White wins.";
+            } else if (gameTemp.in_stalemate()) {
               result += "Stalemate!";
-              updateGameFen(game.fen(), "Completed", game.turn(), result);
-              result += game.turn() === "w" ? "Black wins." : "White wins.";
-            } else if (game.in_draw()) {
+              updateGameFen(gameTemp.fen(), "Completed", gameTemp.turn(), result);
+              result += gameTemp.turn() === "w" ? "Black wins." : "White wins.";
+            } else if (gameTemp.in_draw()) {
               result += "Draw!";
-              updateGameFen(game.fen(), "Completed", game.turn(), result);
-              result += game.turn() === "w" ? "Black wins." : "White wins.";
-            } else if (game.in_threefold_repetition()) {
+              updateGameFen(gameTemp.fen(), "Completed", gameTemp.turn(), result);
+              result += gameTemp.turn() === "w" ? "Black wins." : "White wins.";
+            } else if (gameTemp.in_threefold_repetition()) {
               result += "Threefold Repetition!";
-              updateGameFen(game.fen(), "Completed", game.turn(), result);
-              result += game.turn() === "w" ? "Black wins." : "White wins.";
-            } else if (game.insufficient_material()) {
+              updateGameFen(gameTemp.fen(), "Completed", gameTemp.turn(), result);
+              result += gameTemp.turn() === "w" ? "Black wins." : "White wins.";
+            } else if (gameTemp.insufficient_material()) {
               result += "Insufficient Material!";
-              updateGameFen(game.fen(), "Completed", game.turn(), result);
-              result += game.turn() === "w" ? "Black wins." : "White wins.";
+              updateGameFen(gameTemp.fen(), "Completed", gameTemp.turn(), result);
+              result += gameTemp.turn() === "w" ? "Black wins." : "White wins.";
             }
             setGameResult(result);
           }
@@ -258,7 +265,7 @@ const ChessGame = ({ gameId }: { gameId: string }) => {
       <EvalBar score={info?.score ?? 0} />
       <div className="flex flex-col gap-4 mb-2 items-center md:w-3/5">
         <div className="w-[500px]">
-          <Chessboard
+        <Chessboard
             id="StyledBoard"
             boardOrientation="white"
             position={game.fen()}
@@ -311,6 +318,7 @@ const ChessGame = ({ gameId }: { gameId: string }) => {
             {" "}
             {/* Updated line */}
             <Button
+            variant={"outline"}
               className="m-2"
               onClick={() => {
                 game.reset();
@@ -320,6 +328,7 @@ const ChessGame = ({ gameId }: { gameId: string }) => {
               Reset
             </Button>
             <Button
+            variant={"ghost"}
               className="m-2"
               onClick={() => {
                 game.undo();
