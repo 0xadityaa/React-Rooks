@@ -15,8 +15,7 @@ export async function middleware(request: ExtendedRequest) {
      path === '/signup' ||
     path === ('/api/auth/signin') ||
     path === ('/api/auth/signup') ||
-    path === ('/api/auth/signout') || 
-    path === ('/')
+    path === ('/api/auth/signout')
 
     const token = request.cookies.get('token')?.value || null
     const refreshToken = request.cookies.get('refreshToken')?.value || null

@@ -32,7 +32,6 @@
     "react-chessboard": "^4.6.0",
     "react-dom": "^18",
     "react-spring": "^9.7.3",
-    "simple-icons": "^13.1.0",
     "stockfish.wasm": "^0.10.0",
     "tailwind-merge": "^2.4.0",
     "tailwindcss-animate": "^1.0.7",

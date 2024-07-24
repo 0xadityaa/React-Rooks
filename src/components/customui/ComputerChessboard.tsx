@@ -8,8 +8,6 @@ import EvalBar from "./EvalBar";
 import { Info } from "@/lib/Info";
 import { Button } from "../ui/button";
 import ChessDataComponent from "./ChessDataCard";
-import DotPattern from "../magicui/dot-pattern";
-import { cn } from "@/lib/utils";
 
 const levels: { [key: string]: number } = {
   "Easy 🤓": 2,
@@ -48,7 +46,7 @@ const ChessGame = ({ gameId }: { gameId: string }) => {
           fen,
           status: status ? status : "pending",
           winner,
-          result_type,
+          result_type
         }),
       });
 
@@ -109,18 +107,8 @@ const ChessGame = ({ gameId }: { gameId: string }) => {
             let result = "Game Over. ";
             if (game.in_checkmate()) {
               result += "Checkmate! ";
-              updateGameFen(
-                game.fen(),
-                "Completed",
-                game.turn() === "w" ? "b" : "w",
-                result
-              );
-              console.log(
-                game.fen(),
-                "Completed",
-                game.turn() === "w" ? "b." : "w.",
-                result
-              );
+              updateGameFen(game.fen(), "Completed", game.turn() === "w" ? "b" : "w", result);
+              console.log(game.fen(), "Completed", game.turn() === "w" ? "b." : "w.", result);
               result += game.turn() === "w" ? "Black wins." : "White wins.";
             } else if (game.in_stalemate()) {
               result += "Stalemate!";
@@ -249,7 +237,7 @@ const ChessGame = ({ gameId }: { gameId: string }) => {
   });
 
   return (
-    <div className="flex flex-col md:flex-row gap-8 align-middle items-center">
+    <div className="flex flex-col md:flex-row gap-8">
       <EvalBar score={info?.score ?? 0} />
       <div className="flex flex-col gap-4 mb-2 items-center md:w-3/5">
         <div className="w-[500px]">
@@ -269,7 +257,7 @@ const ChessGame = ({ gameId }: { gameId: string }) => {
         </div>
       </div>
       <div className="md:w-2/5 flex flex-col">
-        <div className="overflow-hidden h-[500px] w-100 border-dashed border-2 border-gray-200 p-4 rounded-md">
+        <div className="overflow-hidden h-[500px] border-dashed border-2 border-gray-200 p-4 rounded-md">
           <h2 className="mb-2">Game Evaluation</h2>
           {!info && !isThinking && (
             <div className="bg-background border text-white p-2 mt-5 rounded-md h-[420px]">

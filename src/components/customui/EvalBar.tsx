@@ -6,8 +6,8 @@ const EvalBar = ({ score }: { score: number }) => {
 
   return (
     <>
-      <div className="relative rounded-md flex flex-col items-center justify-center h-[500px] w-[60px] bg-gray-200 text-center">
-        <div className="absolute top-0 w-full text-lg text-black font-light text-pretty align-text-top z-10">
+      <div className="relative rounded-md flex flex-col items-center justify-center h-[500px] w-[80px] bg-gray-200 text-center">
+        <div className="absolute top-0 w-full text-xl text-black font-light text-pretty align-text-top z-10">
           {-1 * score}
         </div>
         <div className="relative h-full w-full">
